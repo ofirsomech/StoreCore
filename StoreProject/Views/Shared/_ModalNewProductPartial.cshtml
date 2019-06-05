@@ -1,0 +1,49 @@
+﻿<div class="modal fade" id="newProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add new product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Create" enctype="multipart/form-data">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="@(new Product().Title)">Title:</label>
+                        <input asp-for="@(new Product().Title)" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@(new Product().ShortDescription)">Short Description:</label>
+                        <input asp-for="@(new Product().ShortDescription)" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@(new Product().LongDescription)">Long Description:</label>
+                        <input asp-for="@(new Product().LongDescription)" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@(new Product().Price)">Price:</label>
+                        <input asp-for="@(new Product().Price)" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@(new Product().Img1)">Image 1:</label>
+                        <input type="file" class="form-control" name="img1" multiple>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@(new Product().Img2)">Image 2:</label>
+                        <input type="file" class="form-control" name="img2" multiple>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@(new Product().Img3)">Image 3:</label>
+                        <input type="file" class="form-control" name="img3" multiple>
+                    </div>
+                    <input type="submit" value="Add product" class="btn btn-default" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

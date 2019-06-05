@@ -1,0 +1,49 @@
+﻿@model StoreProject.Models.Product
+@inject IHttpContextAccessor httpContext
+
+
+
+
+<h3>Cart Page</h3>
+@if (ViewBag.cart == null)
+{
+    <p>The cart is empty</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Title</th>
+                <th scope="col">Price</th>
+                <th scope="col">Delete</th>
+                <th scope="col">Buy</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.cart)
+            {
+                if (item.State == State.InCart)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Title</td>
+                        <td>@item.Price</td>
+                        <td><a asp-action="Remove" asp-controller="Cart" asp-route-id="@item.Id">Del</a></td>
+                        <td><a asp-action="Buy" asp-controller="Cart" asp-route-id="@item.Id">Buy</a></td>
+                    </tr>
+                }
+            }
+    </table>
+    <br>
+    <p>total price is: @ViewBag.TotalPrice</p>
+    @if (httpContext.HttpContext.Request.Cookies["login_user"] != null)
+    {
+        <p>total price After membership Price: @Product.GetDiscount((double)ViewBag.TotalPrice)</p>
+
+    }
+
+    <a asp-action="BuyAll" asp-controller="Cart" class="btn btn-danger">Buy All</a>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Continue Shopping</a>
+}

@@ -1,0 +1,77 @@
+﻿@model List<StoreProject.Models.Product>
+@inject IHttpContextAccessor httpContext
+
+    <div style="
+  margin: auto;
+  width: 10%;
+  padding: 10px;"
+         class="btn-" role="group" aria-label="Basic example">
+        <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" class="btn btn-unique">@Html.DisplayNameFor(model => (new Product().Title))</a>
+        <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" class="btn btn-unique">@Html.DisplayNameFor(model => (new Product().Date))</a>
+    </div>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="row">
+                @foreach (var product in Model)
+                {
+                    @if (product.State == State.InStore)
+                    {
+                        <!-- Card -->
+                        <div class="card" id="padding-right">
+
+                            <!-- Card image -->
+                            <div class="view overlay">
+                                @if (product.Img1 != null)
+                                {
+                                    var base64 = Convert.ToBase64String(product.Img1);
+                                    var imgSrc = String.Format("data:image;base64,{0}", base64);
+                                    <img class="card-img-top" id="imagesProduct" class="card-img-top" src="@imgSrc" alt="Card image cap" />
+                                }
+                                <a href="#!">
+                                    <div class="mask rgba-white-slight"></div>
+                                </a>
+                            </div>
+
+                            <!-- Card content -->
+                            <div class="card-body">
+
+                                <!-- Title -->
+                                <h6 style="font-size: 12px; font-weight: bold" class="card-title">@product.Date.ToShortDateString()</h6>
+
+                                <!-- Title -->
+                                <h4 class="card-title">@product.Title</h4>
+
+
+
+                                @if (httpContext.HttpContext.Request.Cookies["login_user"] != null)
+                                {
+                                    <p style="text-decoration: line-through;" class="card-text">@product.Price$</p>
+                                    <p class="card-text">@Product.GetDiscount((double)product.Price)$</p>
+                                }
+                                else
+                                {
+                                    <p class="card-text">@product.Price$</p>
+                                }
+
+                                <!-- Text -->
+                                <p class="card-text"> @product.ShortDescription</p>
+
+
+
+                                <!-- Button -->
+                                <a asp-action="Info" asp-route-id="@product.Id" class="btn btn-info">Info</a> |
+                                <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@product.Id" class="btn btn-secondary">Add to cart</a>
+
+
+
+                            </div>
+
+                        </div>
+                        <!-- Card -->
+                    }
+                }
+            </div>
+        </div>
+    </div>
