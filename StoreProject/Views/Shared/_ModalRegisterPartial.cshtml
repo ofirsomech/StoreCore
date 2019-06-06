@@ -34,6 +34,9 @@
                     <small id="defaultRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
                         At least 8 characters and 1 digit
                     </small>
+                    <!--Re Password -->
+                    <input asp-for="@(new User().RePassword)" type="password" id="defaultRegisterFormPassword" class="form-control" placeholder="Re Password" aria-describedby="defaultRegisterFormPasswordHelpBlock">
+                    <span asp-validation-for="@(new User().RePassword)" class="text-danger"></span>
 
 
                     <!-- Sign up button -->
@@ -46,6 +49,7 @@
                         By clicking
                         <em>Sign up</em> you agree to our
                         <a href="" target="_blank">terms of service</a>
+                        <div asp-validation-summary="All" class="text-danger"></div>
 
                 </form>
                 <!-- Default form register -->
