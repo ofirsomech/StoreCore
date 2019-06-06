@@ -8,5 +8,18 @@
 }
 
 .backGroundCard {
-    background-color: gray;
+    background-image: url('https://cdn.pixabay.com/photo/2015/12/03/08/50/paper-1074131_1280.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    /*background-color: #cbae82;*/
+}
+.transportBackground {
+    background-color: transparent;
+}
+.backGroundStore {
+    background-image: url('https://cdn.pixabay.com/photo/2015/12/03/08/50/paper-1074131_1280.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }

@@ -22,15 +22,17 @@ namespace StoreProject.Controllers
     public class HomeController : Controller
     {
         IProductService _products;
+        IAccountService _accounts;
         private readonly IHttpContextAccessor _httpContext;
         StoreDBContext _context;
 
 
-        public HomeController(IProductService products, StoreDBContext context, IHttpContextAccessor httpContext)
+        public HomeController(IProductService products, StoreDBContext context, IHttpContextAccessor httpContext , IAccountService accounts)
         {
             _products = products;
             _context = context;
             _httpContext = httpContext;
+            _accounts = accounts;
             ViewBag.activeUser = httpContext.HttpContext.Request.Cookies["login_user"];
 
         }
@@ -151,6 +153,16 @@ namespace StoreProject.Controllers
             var product = _products.GetProduct(id);
 
             return View(product);
+        }
+
+        public IActionResult MyProducts(int id)
+        {
+
+            var user = _accounts.GetUser(id);
+            var products = _products.GetProducts();
+            var myProducts = products.FindAll(p => p.OwnerId == id);
+
+            return View(myProducts);
         }
 
 

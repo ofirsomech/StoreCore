@@ -62,6 +62,26 @@ namespace StoreProject.Controllers
         }
 
 
+
+        public IActionResult Update(int id)
+        {
+            var user = _acc.GetUser(id);
+
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public IActionResult Update(User user)
+        {
+            _acc.UpdateUser(user);
+            var json = JsonConvert.SerializeObject(user);
+            Set("login_user", json);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+
         private void Set(string key, string value)
         {
             CookieOptions option = new CookieOptions

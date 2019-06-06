@@ -6,8 +6,8 @@
   width: 10%;
   padding: 10px;"
          class="btn-" role="group" aria-label="Basic example">
-        <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" class="btn btn-unique">@Html.DisplayNameFor(model => (new Product().Title))</a>
-        <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" class="btn btn-unique">@Html.DisplayNameFor(model => (new Product().Date))</a>
+        <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" class="btn btn-brown">@Html.DisplayNameFor(model => (new Product().Title))</a>
+        <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" class="btn btn-brown">@Html.DisplayNameFor(model => (new Product().Date))</a>
     </div>
 
 
@@ -61,8 +61,8 @@
 
 
                                 <!-- Button -->
-                                <a asp-action="Info" asp-route-id="@product.Id" class="btn btn-info">Info</a> |
-                                <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@product.Id" class="btn btn-secondary">Add to cart</a>
+                                <a asp-action="Info" asp-route-id="@product.Id" class="btn btn-cyan">Info</a> |
+                                <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@product.Id" class="btn btn-deep-orange">Add to cart</a>
 
 
 

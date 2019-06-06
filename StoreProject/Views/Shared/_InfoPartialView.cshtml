@@ -1,0 +1,122 @@
+﻿@model StoreProject.Models.Product
+@inject IHttpContextAccessor httpContext
+
+
+    <!-- Jumbotron -->
+<div class="jumbotron text-center" style="background-color: transparent" id="transportBackground">
+
+    <!-- Date and publisher -->
+    <h6 style="font-size: 15px" class="card-title h4 pb-2"><strong>Upload by @Model.Owner.UserName  , at @Model.Date.ToShortDateString()</strong></h6>
+
+    @if (httpContext.HttpContext.Request.Cookies["login_user"] != null)
+    {
+        if (Model.OwnerId == ViewBag.activeUser.Id)
+        {
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+        }
+    }
+
+    <!-- Title -->
+    <h1 class="brown-text h1 pb-2"><strong>@Model.Title</strong></h1> @*todo text size*@
+
+
+    <h5 class="brown-text h2 mb-4">@Model.ShortDescription</h5>
+
+    <p class="card-text">@Model.LongDescription</p>  
+
+    <!-- Card image -->
+    <!--Carousel Wrapper-->
+    <div id="carousel-example-1z" class="carousel slide carousel-fade" data-ride="carousel">
+        <!--Indicators-->
+        <ol class="carousel-indicators">
+            @if (Model.Img1 != null)
+            {
+                <li data-target="#carousel-example-1z" data-slide-to="0" class="active"></li>
+            }
+            @if (Model.Img2 != null)
+            {
+                <li data-target="#carousel-example-1z" data-slide-to="1"></li>
+            }
+            @if (Model.Img3 != null)
+            {
+                <li data-target="#carousel-example-1z" data-slide-to="2"></li>
+            }
+        </ol>
+        <!--/.Indicators-->
+        <!--Slides-->
+        <div class="carousel-inner" role="listbox">
+            <!--First slide-->
+            <div class="carousel-item active">
+                @if (Model.Img1 != null)
+                {
+                    var base64 = Convert.ToBase64String(Model.Img1);
+                    var imgSrc = String.Format("data:image;base64,{0}", base64);
+                    <img id="imagesProductInfo" class="d-block" src="@imgSrc "
+                         alt="First slide">
+                }
+            </div>
+            <!--/First slide-->
+            <!--Second slide-->
+            <div class="carousel-item">
+                @if (Model.Img2 != null)
+                {
+                    var base64 = Convert.ToBase64String(Model.Img2);
+                    var imgSrc = String.Format("data:image;base64,{0}", base64);
+                    <img id="imagesProductInfo" class="d-block" src="@imgSrc "
+                         alt="Second slide">
+                }
+            </div>
+            <!--/Second slide-->
+            <!--Third slide-->
+            <div class="carousel-item">
+                @if (Model.Img3 != null)
+                {
+                    var base64 = Convert.ToBase64String(Model.Img3);
+                    var imgSrc = String.Format("data:image;base64,{0}", base64);
+                    <img id="imagesProductInfo" class="d-block" src="@imgSrc "
+                         alt="Third slide">
+                }
+            </div>
+            <!--/Third slide-->
+        </div>
+        <!--/.Slides-->
+        <!--Controls-->
+        <a class="carousel-control-prev" href="#carousel-example-1z" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carousel-example-1z" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+        <!--/.Controls-->
+    </div>
+    <!--/.Carousel Wrapper-->
+
+
+
+
+    @if (httpContext.HttpContext.Request.Cookies["login_user"] != null)
+    {
+        <h3 style="text-decoration: line-through;" class="card-text">Price: @Model.Price</h3>
+        <h3 class="card-text" style="font-weight: bold">Member Price: @Product.GetDiscount((double)Model.Price)</h3> @*TODO*@
+    }
+    else
+    {
+        <h3 class="card-text">Price: @Model.Price</h3>
+
+    }
+
+
+    @if (Model.State == State.Sold)
+    {
+        <p class="red darken-4">Sorry the products is sold</p>
+    }
+    else
+    {
+
+        <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@Model.Id" class="btn btn-deep-orange">Add to Cart</a>
+
+    }
+</div>
+    <!-- Jumbotron -->

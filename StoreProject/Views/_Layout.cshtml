@@ -4,6 +4,7 @@
 <html>
 <head>
     <partial name="_ScriptsStylesPartial" />
+    <title>The Store</title>
 </head>
 <body>
     <!-- NavBar -->
@@ -12,7 +13,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="#">The Store</a>
+            <a asp-action="Index" asp-controller="Home" class="navbar-brand" ><img height="40" width="90" src="~/images/dotSTORE.png"/></a>
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
                     <a asp-action="Index" asp-controller="Home" class="nav-link">Home <span class="sr-only">(current)</span></a>
@@ -24,6 +25,9 @@
                 {
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="modal" data-target="#newProductModal">Add Product</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-action="MyProducts" asp-controller="Home" asp-route-id="@ViewBag.activeUser.Id" class="nav-link">My Products</a>
                     </li>
                     <li class="nav-item">
                         <a asp-action="Index" asp-controller="Cart" class="nav-link">My Cart</a>
@@ -41,7 +45,10 @@
             @if (httpContext.HttpContext.Request.Cookies["login_user"] != null)
             {
                 <p class="textColor">@manageTime.GetGreeting() ,  @ViewBag.activeUser.FirstName  @ViewBag.activeUser.LastName    </p>
-                <a asp-action="Logout" asp-controller="Account" class="btn btn-danger">Log out</a>
+                <a asp-action="Logout" asp-controller="Account" class="btn btn-outline-danger waves-effect btn-sm"><i class="fa fa-bug fa-3x red-text pr-3"
+   aria-hidden="true"></i>Log out</a>
+                <a asp-action="Update" asp-controller="Account" asp-route-id="@ViewBag.activeUser.Id" class="btn deep-orange waves-effect btn-sm"><i class="fa fa-user mr-2"
+   aria-hidden="true"></i>Update </a>
             }
             else
             {
@@ -61,7 +68,7 @@
     <!-- Modal Register -->
     <partial name="_ModalRegisterPartial" />
 
-    <div class="backGroundCard">
+    <div class="backGroundStore"> 
         @RenderBody()
     </div>
 

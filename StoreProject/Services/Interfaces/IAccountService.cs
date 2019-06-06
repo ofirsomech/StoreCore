@@ -11,8 +11,10 @@ namespace StoreProject.Services.Interfaces
     {
         StoreDBContext Store { get; set; }
 
-        bool GetUser(string email , string password , out User user);
+        bool GetUser(string email, string password, out User user);
+        User GetUser(int id);
         bool CreateUser(User newUser);
+        bool UpdateUser(User updateUser);
 
     }
 }

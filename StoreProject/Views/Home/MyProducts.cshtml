@@ -1,0 +1,32 @@
+﻿@model IEnumerable<StoreProject.Models.Product>
+
+@{
+    ViewData["Title"] = "MyProducts";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+<h2>Product of : @ViewBag.activeUser.FirstName @ViewBag.activeUser.LastName </h2>
+
+
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Upload Date</th>
+            <th scope="col">Current State</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <th scope="row">@item.Id</th>
+            <td><a asp-action="Info" asp-controller="Home" asp-route-id="@item.Id" >@item.Title</a></td>
+            <td>@item.Date</td>
+            <td>@item.State.ToString()</td>
+        </tr>
+        }
+    </tbody>
+</table>
