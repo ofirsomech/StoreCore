@@ -5,11 +5,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EASendMail; //add EASendMail namespace
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace StoreProject.Services.Services
 {
     public class AccountService : IAccountService
     {
+
+
         public StoreDBContext Store { get; set; }
 
         public AccountService(StoreDBContext store)
@@ -43,14 +48,64 @@ namespace StoreProject.Services.Services
                 throw;
             }
         }
+        public bool CheckIfEmailExist(string email)
+        {
+
+            try
+            {
+                var userlog = Store.Users.FirstOrDefault(a => a.Email == email);
+                if (userlog == null)
+                    return false;
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
+        }
+        public bool CheckIfUserNameExist(string userName)
+        {
+
+            try
+            {
+                var userlog = Store.Users.FirstOrDefault(a => a.UserName == userName);
+                if (userlog == null)
+                    return false;
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
+        }
+
+
 
         public bool CreateUser(User newUser)
         {
+
             newUser.Password = Encryptor.MD5Hash(newUser.Password);
+            newUser.Guid = Guid.NewGuid();
+
 
             Store.Users.Add(newUser);
             Store.SaveChanges();
             return true;
+        }
+
+        public User UpdateRoleUser(string guid)
+        {
+            var user = GetUserByGuid(guid);
+            if (user != null)
+            {
+                user.Role = Role.RegularUser;
+            }
+            Store.SaveChanges();
+
+            return user;
+
         }
 
         public bool UpdateUser(User updateUser)
@@ -68,5 +123,13 @@ namespace StoreProject.Services.Services
             return true;
 
         }
+
+        public User GetUserByGuid(string guid)
+        {
+            var user = Store.Users.FirstOrDefault(u => u.Guid.ToString() == guid);
+
+            return user;
+        }
+
     }
 }

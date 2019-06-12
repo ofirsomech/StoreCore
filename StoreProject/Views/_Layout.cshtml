@@ -13,25 +13,52 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a asp-action="Index" asp-controller="Home" class="navbar-brand" ><img height="40" width="90" src="~/images/dotSTORE.png"/></a>
+            <a asp-action="Index" asp-controller="Home" class="navbar-brand"><img height="40" width="90" src="~/images/dotSTORE.png" /></a>
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a asp-action="Index" asp-controller="Home" class="nav-link">Home <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                    <a asp-action="Index" asp-controller="Home" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item">
                     <a asp-action="About" asp-controller="Home" class="nav-link">About</a>
                 </li>
                 @if (httpContext.HttpContext.Request.Cookies["login_user"] != null)
                 {
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="modal" data-target="#newProductModal">Add Product</a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-action="MyProducts" asp-controller="Home" asp-route-id="@ViewBag.activeUser.Id" class="nav-link">My Products</a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-action="Index" asp-controller="Cart" class="nav-link">My Cart</a>
-                    </li>
+                    @if (ViewBag.activeUser.Role == Role.RegularUser)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="modal" data-target="#newProductModal">Add Product</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="MyProducts" asp-controller="Home" asp-route-id="@ViewBag.activeUser.Id" class="nav-link">My Products</a>
+                        </li>
+                        <li class="nav-item">
+                            @if (ViewBag.Cart != null)
+                            {
+                                <a asp-action="Index" asp-controller="Cart" class="nav-link">
+                                    My Cart<span class="badge badge-pill badge-light">@ViewBag.Cart.Count</span>
+                                </a>
+                            }
+                            else
+                            {
+
+                                <a asp-action="Index" asp-controller="Cart" class="nav-link">
+                                    My Cart<span class="badge badge-pill badge-light">0</span>
+                                </a>
+                            }
+                        </li>
+                    }
+                    if (ViewBag.activeUser.Role == Role.NotVerify)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link disabled" data-toggle="modal" data-target="#newProductModal">Add Product</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="MyProducts" asp-controller="Home" asp-route-id="@ViewBag.activeUser.Id" class="nav-link disabled">My Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="Cart" class="nav-link disabled">My Cart</a>
+                        </li>
+                    }
                 }
                 else
                 {
@@ -44,11 +71,22 @@
             </ul>
             @if (httpContext.HttpContext.Request.Cookies["login_user"] != null)
             {
-                <p class="textColor">@manageTime.GetGreeting() ,  @ViewBag.activeUser.FirstName  @ViewBag.activeUser.LastName    </p>
-                <a asp-action="Logout" asp-controller="Account" class="btn btn-outline-danger waves-effect btn-sm"><i class="fa fa-bug fa-3x red-text pr-3"
-   aria-hidden="true"></i>Log out</a>
-                <a asp-action="Update" asp-controller="Account" asp-route-id="@ViewBag.activeUser.Id" class="btn deep-orange waves-effect btn-sm"><i class="fa fa-user mr-2"
-   aria-hidden="true"></i>Update </a>
+                if (ViewBag.activeUser.Role == Role.NotVerify)
+                {
+                    <p class="textColor">@manageTime.GetGreeting() ,  @ViewBag.activeUser.FirstName  @ViewBag.activeUser.LastName ,<p class="text-danger">please verify your acount</p></p>
+                }
+                if (ViewBag.activeUser.Role == Role.RegularUser)
+                {
+                    <p class="textColor">@manageTime.GetGreeting() ,  @ViewBag.activeUser.FirstName  @ViewBag.activeUser.LastName</p>
+                }
+                <a asp-action="Logout" asp-controller="Account" class="btn btn-outline-danger waves-effect btn-sm">
+                    <i class="fa fa-bug fa-3x red-text pr-3"
+                       aria-hidden="true"></i>Log out
+                </a>
+                <a asp-action="Update" asp-controller="Account" asp-route-id="@ViewBag.activeUser.Id" class="btn deep-orange waves-effect btn-sm">
+                    <i class="fa fa-user mr-2"
+                       aria-hidden="true"></i>Update
+                </a>
             }
             else
             {
@@ -68,7 +106,26 @@
     <!-- Modal Register -->
     <partial name="_ModalRegisterPartial" />
 
-    <div class="backGroundStore"> 
+
+    <!-- Alert if user not verify -->
+    @if (ViewBag.activeUser != null)
+    {
+
+        @if (ViewBag.activeUser.Role == Role.NotVerify)
+        {
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Stop!</h4>
+                <p>You need verify your account before use all the site options.</p>
+                <hr>
+                <p class="mb-0">For activate your account go to your email: @ViewBag.activeUser.Email.</p>
+            </div>
+        }
+
+    }
+
+
+    <!-- Body -->
+    <div class="backGroundStore">
         @RenderBody()
     </div>
 

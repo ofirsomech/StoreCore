@@ -27,7 +27,7 @@ namespace StoreProject.Controllers
         StoreDBContext _context;
 
 
-        public HomeController(IProductService products, StoreDBContext context, IHttpContextAccessor httpContext , IAccountService accounts)
+        public HomeController(IProductService products, StoreDBContext context, IHttpContextAccessor httpContext, IAccountService accounts)
         {
             _products = products;
             _context = context;
@@ -182,6 +182,11 @@ namespace StoreProject.Controllers
             return View();
         }
 
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
         private void Set(string key, string value)
         {
             CookieOptions option = new CookieOptions
@@ -196,8 +201,25 @@ namespace StoreProject.Controllers
             try
             {
                 base.OnActionExecuted(context);
+                try
+                {
                 var _activeuser = JsonConvert.DeserializeObject<User>(_httpContext.HttpContext.Request.Cookies["login_user"]);
                 ViewBag.activeUser = _activeuser;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                try
+                {
+                    var cart = SessionHelper.GetObjectFromJson<List<Product>>(HttpContext.Session, CartController.getKey());
+                    ViewBag.Cart = cart;
+
+                }
+                catch
+                {
+                    Console.WriteLine("error");
+                }
 
             }
             catch (Exception e)

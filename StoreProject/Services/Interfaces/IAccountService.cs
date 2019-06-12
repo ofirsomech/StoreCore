@@ -13,8 +13,11 @@ namespace StoreProject.Services.Interfaces
 
         bool GetUser(string email, string password, out User user);
         User GetUser(int id);
+        bool CheckIfEmailExist(string email);
+        bool CheckIfUserNameExist(string userName);
         bool CreateUser(User newUser);
         bool UpdateUser(User updateUser);
-
+        User UpdateRoleUser(string guid);
+        User GetUserByGuid(string guid);
     }
 }

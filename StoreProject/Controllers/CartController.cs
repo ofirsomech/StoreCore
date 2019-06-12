@@ -160,8 +160,25 @@ namespace StoreProject.Controllers
             try
             {
                 base.OnActionExecuted(context);
-                var _activeuser = JsonConvert.DeserializeObject<User>(_httpContext.HttpContext.Request.Cookies["login_user"]);
-                ViewBag.activeUser = _activeuser;
+                try
+                {
+                    var _activeuser = JsonConvert.DeserializeObject<User>(_httpContext.HttpContext.Request.Cookies["login_user"]);
+                    ViewBag.activeUser = _activeuser;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                try
+                {
+                    var cart = SessionHelper.GetObjectFromJson<List<Product>>(HttpContext.Session, CartController.getKey());
+                    ViewBag.Cart = cart;
+
+                }
+                catch
+                {
+                    Console.WriteLine("error");
+                }
 
             }
             catch (Exception e)

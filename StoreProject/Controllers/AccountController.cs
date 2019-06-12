@@ -6,21 +6,28 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
+using StoreProject.DataContext;
 using StoreProject.Models;
 using StoreProject.Services.Interfaces;
+using StoreProject.Services.Services;
+using StoreProject.Tools;
 
 namespace StoreProject.Controllers
 {
     public class AccountController : Controller
     {
         IAccountService _acc;
+        IEmailSender _email;
+        StoreDBContext _context;
         private readonly IHttpContextAccessor _httpContext;
 
-        public AccountController(IAccountService acc, IHttpContextAccessor httpContext)
+        public AccountController(IAccountService acc, IHttpContextAccessor httpContext, IEmailSender email, StoreDBContext context)
         {
             _acc = acc;
             _httpContext = httpContext;
             ViewBag.activeUser = httpContext.HttpContext.Request.Cookies["login_user"];
+            _email = email;
+            _context = context;
         }
         public IActionResult Login()
         {
@@ -55,10 +62,54 @@ namespace StoreProject.Controllers
         [HttpPost]
         public IActionResult Register(User user)
         {
-
-            _acc.CreateUser(user);
+            if (!_acc.CheckIfEmailExist(user.Email))
+            {
+                //Eror if need
+                if (!_acc.CheckIfUserNameExist(user.UserName))
+                {
+                    _acc.CreateUser(user);
+                    var json = JsonConvert.SerializeObject(user);
+                    Set("login_user", json);
+                    _email.SendEmail(user);
+                    //Eror if need
+                }
+            }
+            //TODO EROOR!
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult SendEmailVerify()
+        {
+            var _activeuser = JsonConvert.DeserializeObject<User>(_httpContext.HttpContext.Request.Cookies["login_user"]);
+            _email.SendEmail(_activeuser);
+            return RedirectToAction("VerifyUser", "Account", new { _activeuser.Guid });
+        }
+
+
+
+        [HttpGet("Account/VerifyUser/{guid}", Name = "guid")]
+        public IActionResult VerifyUser(string guid)
+        {
+            var user = _acc.GetUserByGuid(guid);
+
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public IActionResult VerifyUser(User user)
+        {
+            var _activeuser = JsonConvert.DeserializeObject<User>(_httpContext.HttpContext.Request.Cookies["login_user"]);
+            user = _activeuser;
+            user = _acc.UpdateRoleUser(user.Guid.ToString());
+            var json = JsonConvert.SerializeObject(user);
+            Set("login_user", json);
+
+            if (user.Role == Role.NotVerify)
+                return RedirectToAction("VerifyUser", "Account");
+            else
+                return RedirectToAction("Index", "Home");
         }
 
 
@@ -82,7 +133,7 @@ namespace StoreProject.Controllers
         }
 
 
-        private void Set(string key, string value)
+        public void Set(string key, string value)
         {
             CookieOptions option = new CookieOptions
             {
@@ -96,8 +147,25 @@ namespace StoreProject.Controllers
             try
             {
                 base.OnActionExecuted(context);
-                var _activeuser = JsonConvert.DeserializeObject<User>(_httpContext.HttpContext.Request.Cookies["login_user"]);
-                ViewBag.activeUser = _activeuser;
+                try
+                {
+                    var _activeuser = JsonConvert.DeserializeObject<User>(_httpContext.HttpContext.Request.Cookies["login_user"]);
+                    ViewBag.activeUser = _activeuser;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                try
+                {
+                    var cart = SessionHelper.GetObjectFromJson<List<Product>>(HttpContext.Session, CartController.getKey());
+                    ViewBag.Cart = cart;
+
+                }
+                catch
+                {
+                    Console.WriteLine("error");
+                }
 
             }
             catch (Exception e)

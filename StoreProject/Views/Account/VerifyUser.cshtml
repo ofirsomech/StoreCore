@@ -1,0 +1,50 @@
+﻿@model StoreProject.Models.User
+
+@{
+    ViewData["Title"] = "VerifyUser";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+@if (ViewBag.activeUser.Role == Role.NotVerify)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h1>Yay! You're Almost There.</h1>
+                <h2>Activate your account to finish signing up.</h2>
+                <h5>We've sent you a welcome email with an activation link. Simply click the link and you're good to go.</h5>
+                <h5>If you dont get the activation link dont worry , just <a asp-action="SendEmailVerify" asp-controller="Account">click here and we'll send you a new activation link</a>.</h5>
+
+                <form asp-action="VerifyUser">
+                    <div class="form-group">
+                        <input type="submit" value="Activate" asp-route-id="@ViewBag.activeUser" class="btn btn-default" />
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-3">
+
+                <!-- Card -->
+                <div class="card">
+                    <strong>Still missing your activation?</strong>
+                    <ol>
+                        <li>1. Check your spam folder for the missing email sent from test@gmail.com</li>
+                        <li>2. Make sure you're logging in with the currect email address</li>
+                        <li>3. If you're still having issues , <a src="ofirsomech4@gmail.com">contact us</a></li>
+                    </ol>
+
+                </div>
+
+            </div>
+            <!-- Card -->
+
+
+        </div>
+    </div>
+}
+else
+{
+    <p>You are Activate now</p>
+}
+
+
+

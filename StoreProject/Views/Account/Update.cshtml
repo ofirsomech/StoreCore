@@ -6,7 +6,8 @@
 }
 
 <h2>Update</h2>
-
+@if(ViewBag.activeUser != null)
+{
 <h4>@ViewBag.activeUser.FirstName</h4>
 <hr />
 <div class="row">
@@ -50,5 +51,10 @@
         </form>
     </div>
 </div>
+}
+else
+{
+    <h1>Log in !</h1>
+}
 
 

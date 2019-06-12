@@ -25,15 +25,15 @@ namespace StoreProject.DataContext
             var webClient = new WebClient();
 
 
-            modelBuilder.Entity<User>().HasData(
-                new User { Id = 1, FirstName = "Ofir", LastName = "Somech", Email = "user@gmail.com", UserName = "user@gmail.com", BirthDate = DateTime.Now, Password = "123456" },
-                new User { Id = 2, FirstName = "Avi", LastName = "Levi", Email = "avi@gmail.com", UserName = "avi@gmail.com", BirthDate = DateTime.Now, Password = "123456" },
-                new User { Id = 3, FirstName = "Dani", LastName = "Cohen", Email = "dani@gmail.com", UserName = "dani@gmail.com", BirthDate = DateTime.Now, Password = "123456" }
-                );
+            //modelBuilder.Entity<User>().HasData(
+            //    new User { Id = 1, FirstName = "Ofir", LastName = "Somech", Email = "user@gmail.com", UserName = "user@gmail.com", BirthDate = DateTime.Now, Password = "123456" },
+            //    new User { Id = 2, FirstName = "Avi", LastName = "Levi", Email = "avi@gmail.com", UserName = "avi@gmail.com", BirthDate = DateTime.Now, Password = "123456" },
+            //    new User { Id = 3, FirstName = "Dani", LastName = "Cohen", Email = "dani@gmail.com", UserName = "dani@gmail.com", BirthDate = DateTime.Now, Password = "123456" }
+            //    );
 
-            modelBuilder.Entity<Product>().HasData(
-                new Product { Id = 1, OwnerId = 3, UserId = 2, Date = DateTime.Now, LongDescription = "test", ShortDescription = "TEST1",Price = 33, Title = "title", State = State.InStore}
-                );
+            //modelBuilder.Entity<Product>().HasData(
+            //    new Product { Id = 1, OwnerId = 3, UserId = 2, Date = DateTime.Now, LongDescription = "test", ShortDescription = "TEST1",Price = 33, Title = "title", State = State.InStore}
+            //    );
 
             
         }
