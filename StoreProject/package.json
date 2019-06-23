@@ -8,6 +8,6 @@
     "jquery-validation": "1.19.0",
     "jquery-validation-unobtrusive": "3.2.11",
     "mdbootstrap": "4.8.2",
-    "bootstrap": "4.0.0"
+    "bootstrap": "4.3.1"
   }
 }
